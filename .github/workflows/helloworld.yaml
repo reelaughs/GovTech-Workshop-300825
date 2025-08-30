@@ -1,5 +1,5 @@
 #there is a one-to-one comparison between yaml and json
-# json style would be on:[push
+# json style would be on:[push], this is what ChatGPT suggested as well (even said below method is wrong)
 #jobs{
 #}
 
@@ -15,11 +15,21 @@ jobs:
   greetings:
     runs-on: ubuntu-latest
     steps:
-    - id: s01
-      run: echo "Current time in GitHub is $(date)" 
-      #run in Ubuntu is running some commands in the shell eg bash. some shell bash command
+    - id: s00
+    #create some shell bash command
+      run: echo "Current time in GitHub is $(date),${GITHUB_OUTPUT}"
+    - id: s01   
+      #Create a value and pass to the next step
+      run: echo "CURR_DATE=$(date)" >> $GITHUB_OUTPUT
     - id: s02
       uses: mscoutermarsh/cowsays-action@master
       with:
-        text: 'ship ship ship!'
+      #step - context
+        text: 'ship ship ship! ${{steps.s01.outputs.CURR_DATE}},${{github.ref }}, ${{github.repository}}'
         color: 'red'
+      #- id: s01
+      #list the dictionary
+      #run ls -al
+      #- id: s02
+      # cat the file
+      #run: cat hello.txt
